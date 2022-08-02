@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load socialaccount %}
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <h5>{% translate "Login or Signup" %}</h5>
+{% if user.is_authenticated %}
+    <p>{% translate "You are logged in as: " %}{{ user.username }}</p>
+{% else %}
+    <p><a href="{% provider_login_url 'google' %}">{% translate "Signup or Login with Google" %}</a></p>
+{% endif %}
+</div>
+
+{% endblock content %}
