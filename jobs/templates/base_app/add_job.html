@@ -1,14 +1,10 @@
-{% extends 'base.html' %}
-
-{% block content %}
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <form method="post" hx-post="/add_job/" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' hx-target="#jobs-table">
+            <form method="post" hx-post="/add_job/" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' hx-target="#bodyContent">
                 {{ form }}
                 <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Submit</button>
             </form>
         </div>
     </div>
 </div>
-{% endblock content %}

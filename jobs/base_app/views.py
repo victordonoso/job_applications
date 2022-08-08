@@ -5,6 +5,7 @@ from django.views.generic import TemplateView
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django_htmx.http import trigger_client_event
 
 from .forms import JobApplicationForm, ReminderForm
 
@@ -22,7 +23,9 @@ class MyJobs(LoginRequiredMixin, TemplateView):
 
 def jobs_table(request):
     jobs = JobApplications.objects.filter(app_user=request.user)
-    return render(request, 'base_app/jobs_table.html', {'jobs': jobs})
+    for job in jobs:
+        job.reminders = ReminderModel.objects.filter(parent_job=job)
+    return render(request, 'base_app/my_jobs.html', {'jobs': jobs})
 
 def add_job(request):
     if request.method == 'POST':
@@ -31,7 +34,12 @@ def add_job(request):
             job = form.save(commit=False)
             job.app_user = request.user
             job.save()
-            return jobs_table(request)
+            job_list = JobApplications.objects.filter(app_user=request.user)
+            for job in job_list:
+                job.reminders = ReminderModel.objects.filter(parent_job=job)
+            response = render(request, 'base_app/my_jobs.html', {'jobs': job_list})
+            trigger_client_event(response, 'updateMyJobs', {})
+            return response
     form = JobApplicationForm()
     return render(request, 'base_app/add_job.html', {'form': form})
 

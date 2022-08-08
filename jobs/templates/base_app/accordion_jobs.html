@@ -1,0 +1,45 @@
+<div class="accordion" id="jobsAccordion">
+    {% for job in jobs %}
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="heading-{{job.id}}">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{job.id}}" aria-expanded="true" aria-controls="collapse-{{job.id}}">{{ job.job_company|capfirst }}: {{ job.job_title|capfirst }} - {{ job.job_created }} - {{ job.get_contract_type_display }}</button></h2>
+        <div id="collapse-{{job.id}}" class="accordion-collapse collapse" aria-labelledby="heading-{{job.id}}" data-bs-parent="#jobsAccordion">
+            <div class="accordion-body">
+                <div class="row auto justify-content-md-center">
+                    <div class="col-xs-4">
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <button type="button" class="btn btn-secondary btn-sm"><i class="bi bi-trash3"></i></button>
+                            <button type="button" class="btn btn-warning btn-sm"><i class="bi bi-pencil-square"></i></button>
+                            <button type="button" class="btn btn-primary btn-sm"><i class="bi bi-calendar-event"></i></button>
+                        </div>
+                        <hr>
+                    </div>
+                    
+            {% if job.reminders %}
+                    <div class="col-xs-4" id="reminders-list-{{job.id}}">
+                        <h6>Reminders for {{ job.job_company|capfirst }}: {{ job.job_title|capfirst }}</h6>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            {% for reminder in job.reminders %}
+                            <tbody>
+                                <tr>
+                                    <td scope="row">{{reminder.get_reminder_type_display}}</td>
+                                    <td>{{reminder.get_reminder_status_display}}</td>
+                                    <td>{{reminder.reminder_date}}</td>
+                                </tr>
+                            </tbody>
+                            {% endfor %}
+                        </table>
+                    </div>
+            {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}

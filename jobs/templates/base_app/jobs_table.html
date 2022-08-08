@@ -9,12 +9,13 @@
             <div class="btn-group" role="group" aria-label="action-list">
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit-job-modal" hx-get="{% url 'edit_job' job.id %}" hx-target="#edit-job-modal-body">Edit</button>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#delete-job-modal" hx-get="/delete_job/{{ job.id }}/" hx-target="#delete-job-modal-body"><i class="bi bi-trash"></i></button>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reminder" hx-get="/reminders/{{ job.id }}/" hx-target="#reminder-body">Reminders</button>
+                <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-reminder-{{job.id}}"><i class="bi bi-alarm"></i> {% if job.reminders %}<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{% with counts=job.reminders.count %}{{counts}}{% endwith %}</span>
+                {% endif %}</button>
             </div> 
         </td>
     </tr>
     {% if job.reminders %}
-    <tr>
+    <tr class="collapse" id="collapse-reminder-{{job.id}}">
         <td colspan="5">
             <table>
                 <thead>
@@ -43,8 +44,8 @@
                     
                     {% endfor %}
                 </tbody>
-                
-                
+            </table>
+        </td>
     </tr>
     {% endif %}
 
