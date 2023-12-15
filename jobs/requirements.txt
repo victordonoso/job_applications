@@ -1,0 +1,5 @@
+py-moneyed
+django-allauth
+django-money
+django-bootstrap5
+django-htmx
